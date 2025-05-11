@@ -1,82 +1,61 @@
 "use client"
 
-import { useState } from "react"
+import {
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Skeleton,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui"
 import { motion } from "framer-motion"
+import { ExternalLink, Github } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ExternalLink, Github } from "lucide-react"
-
-const projects = [
-  {
-    id: 1,
-    title: "E-Commerce Platform",
-    description: "A full-featured e-commerce platform with product management, cart, and checkout functionality.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["React", "Node.js", "MongoDB", "Redux", "Express"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/ecommerce",
-    category: "fullstack",
-  },
-  {
-    id: 2,
-    title: "Task Management App",
-    description: "A Kanban-style task management application with drag-and-drop functionality.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["React", "TypeScript", "Redux", "Tailwind"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/task-manager",
-    category: "frontend",
-  },
-  {
-    id: 3,
-    title: "Blog API",
-    description: "RESTful API for a blog platform with authentication, posts, and comments.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["Node.js", "Express", "MongoDB", "JWT"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/blog-api",
-    category: "backend",
-  },
-  {
-    id: 4,
-    title: "Real-time Chat Application",
-    description: "A real-time chat application with private and group messaging.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["React", "Node.js", "Socket.io", "MongoDB"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/chat-app",
-    category: "fullstack",
-  },
-  {
-    id: 5,
-    title: "Portfolio Website",
-    description: "A responsive portfolio website built with Next.js and Tailwind CSS.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/portfolio",
-    category: "frontend",
-  },
-  {
-    id: 6,
-    title: "Authentication Service",
-    description: "A microservice for user authentication and authorization.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["Node.js", "Express", "JWT", "MongoDB"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/auth-service",
-    category: "backend",
-  },
-]
+import { useEffect, useState } from "react"
 
 export default function Projects() {
   const [activeTab, setActiveTab] = useState("all")
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
-  const filteredProjects = activeTab === "all" ? projects : projects.filter((project) => project.category === activeTab)
+  const fetchProjects = async () => {
+    console.log("Fetching projects...")
+    try {
+      const response = await fetch("https://mahfuz-s-portfolio-website-server.vercel.app/projects")
+      if (!response.ok) {
+        setError(true)
+        setErrorMessage("Failed to fetch projects")
+        return
+      }
+      const data = await response.json()
+      setProjects(data)
+    } catch (err: any) {
+      console.error("Error fetching projects:", err)
+      setError(true)
+      setErrorMessage(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchProjects()
+  }, [])
+
+  const filteredProjects =
+    activeTab === "all"
+      ? projects
+      : projects.filter((project) => project.category === activeTab)
 
   return (
     <section id="projects" className="w-full py-12 md:py-24 lg:py-32 bg-muted/40">
@@ -89,7 +68,9 @@ export default function Projects() {
           viewport={{ once: true }}
         >
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">My Projects</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+              My Projects
+            </h2>
             <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
               A showcase of my recent work and projects.
             </p>
@@ -105,12 +86,25 @@ export default function Projects() {
               <TabsTrigger value="fullstack">Full Stack</TabsTrigger>
             </TabsList>
           </div>
+
           <TabsContent value={activeTab} className="mt-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </div>
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <SkeletonCard key={index} />
+                ))}
+              </div>
+            ) : error ? (
+              <div className="text-red-500 text-center mt-8">
+                <p>Failed to load projects: {errorMessage}</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProjects.map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>
@@ -162,5 +156,27 @@ function ProjectCard({ project }: { project: any }) {
         </CardFooter>
       </Card>
     </motion.div>
+  )
+}
+
+function SkeletonCard() {
+  return (
+    <Card className="overflow-hidden">
+      <Skeleton className="w-full h-[180px]" />
+      <CardHeader>
+        <Skeleton className="h-6 w-3/4" />
+        <Skeleton className="h-4 w-5/6 mt-2" />
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-wrap gap-2">
+          <Skeleton className="h-5 w-12 rounded-full" />
+          <Skeleton className="h-5 w-16 rounded-full" />
+        </div>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Skeleton className="h-8 w-24 rounded-md" />
+        <Skeleton className="h-8 w-24 rounded-md" />
+      </CardFooter>
+    </Card>
   )
 }

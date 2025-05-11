@@ -1,114 +1,91 @@
-"use client"
+"use client";
 
-import { useState, useRef, memo, useCallback } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
-import Image from "next/image"
-import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ExternalLink, Github } from "lucide-react"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ExternalLink, Github } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 type Project = {
-  id: number
-  title: string
-  description: string
-  image: string
-  tags: string[]
-  liveLink: string
-  githubLink: string
-  category: string
-}
-
-const projects: Project[] = [
-  {
-    id: 1,
-    title: "E-Commerce Platform",
-    description: "A full-featured e-commerce platform with product management, cart, and checkout functionality.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["React", "Node.js", "MongoDB", "Redux", "Express"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/ecommerce",
-    category: "fullstack",
-  },
-  {
-    id: 2,
-    title: "Task Management App",
-    description: "A Kanban-style task management application with drag-and-drop functionality.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["React", "TypeScript", "Redux", "Tailwind"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/task-manager",
-    category: "frontend",
-  },
-  {
-    id: 3,
-    title: "Blog API",
-    description: "RESTful API for a blog platform with authentication, posts, and comments.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["Node.js", "Express", "MongoDB", "JWT"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/blog-api",
-    category: "backend",
-  },
-  {
-    id: 4,
-    title: "Real-time Chat Application",
-    description: "A real-time chat application with private and group messaging.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["React", "Node.js", "Socket.io", "MongoDB"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/chat-app",
-    category: "fullstack",
-  },
-  {
-    id: 5,
-    title: "Portfolio Website",
-    description: "A responsive portfolio website built with Next.js and Tailwind CSS.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["Next.js", "TypeScript", "Tailwind", "Framer Motion"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/portfolio",
-    category: "frontend",
-  },
-  {
-    id: 6,
-    title: "Authentication Service",
-    description: "A microservice for user authentication and authorization.",
-    image: "/placeholder.svg?height=300&width=600",
-    tags: ["Node.js", "Express", "JWT", "MongoDB"],
-    liveLink: "https://example.com",
-    githubLink: "https://github.com/mahfuzur/auth-service",
-    category: "backend",
-  },
-]
+  id: number;
+  projectName: string;
+  description: string;
+  Short_Screen_Shot: string;
+  tags: string[];
+  Live_Link: string;
+  GitHub_Client_Side_Link: string;
+  category: string;
+};
 
 const categories = [
   { id: "all", label: "All Projects" },
-  { id: "frontend", label: "Frontend" },
-  { id: "backend", label: "Backend" },
-  { id: "fullstack", label: "Full Stack" },
-]
+  { id: "frontend_based", label: "Frontend" },
+  { id: "backend_based", label: "Backend" },
+  { id: "full_stack_based", label: "Full Stack" },
+];
 
-// Memoize the component to prevent unnecessary re-renders
 const ProjectsSection = memo(function ProjectsSection() {
-  const [activeCategory, setActiveCategory] = useState("all")
-  const ref = useRef<HTMLDivElement>(null)
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [visibleCount, setVisibleCount] = useState(6);
+
+  const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
-  })
+  });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
-  const y = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [100, 0, 0, 100])
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const y = useTransform(scrollYProgress, [100, 0, 0, 100], [0, 0.2, 0.8, 1]);
 
-  // Memoize the filter function to prevent unnecessary re-renders
+  const fetchProjects = async () => {
+    try {
+      const response = await fetch(
+        "https://mahfuz-s-portfolio-website-server.vercel.app/projects"
+      );
+      if (!response.ok) {
+        setError(true);
+        setErrorMessage("Failed to fetch projects");
+        return;
+      }
+      const data = await response.json();
+      setProjects(data);
+    } catch (err: any) {
+      console.error("Error fetching projects:", err);
+      setError(true);
+      setErrorMessage(err.message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
   const filteredProjects = useCallback(
-    () => (activeCategory === "all" ? projects : projects.filter((project) => project.category === activeCategory)),
-    [activeCategory],
-  )()
+    () =>
+      activeCategory === "all"
+        ? projects
+        : projects.filter((p) => p.category === activeCategory),
+    [activeCategory, projects]
+  )();
+
+  const loadMore = () => {
+    setVisibleCount((prev) => prev + 6); // 2 more rows
+  };
 
   return (
-    <section id="projects" ref={ref} className="relative min-h-screen py-16 sm:py-20">
+    <section
+      id="projects"
+      ref={ref}
+      className="relative min-h-screen py-16 sm:py-20"
+    >
       {/* Background elements */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-[30%] -right-[10%] h-[40%] w-[40%] rounded-full bg-accent/30 blur-3xl dark:bg-accent/10" />
@@ -151,7 +128,10 @@ const ProjectsSection = memo(function ProjectsSection() {
               <Button
                 key={category.id}
                 variant={activeCategory === category.id ? "default" : "outline"}
-                onClick={() => setActiveCategory(category.id)}
+                onClick={() => {
+                  setActiveCategory(category.id);
+                  setVisibleCount(6); // Reset visible count on category change
+                }}
                 className="rounded-full text-xs sm:text-sm"
                 size="sm"
               >
@@ -161,17 +141,63 @@ const ProjectsSection = memo(function ProjectsSection() {
           </div>
         </motion.div>
 
-        <motion.div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:gap-8" style={{ opacity, y }}>
-          {filteredProjects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </motion.div>
+        {/* Conditional Rendering States */}
+        {loading && (
+          <div className="col-span-full flex justify-center items-center py-12">
+            <span className="text-muted-foreground animate-pulse">
+              Loading projects...
+            </span>
+          </div>
+        )}
+
+        {error && (
+          <div className="col-span-full flex flex-col justify-center items-center gap-2 py-12">
+            <span className="text-destructive font-medium">
+              {errorMessage}
+            </span>
+          </div>
+        )}
+
+        {!loading && !error && filteredProjects.length === 0 && (
+          <div className="col-span-full text-center text-muted-foreground py-12">
+            No projects found in this category.
+          </div>
+        )}
+
+        {!loading && !error && (
+          <>
+            <motion.div
+              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:gap-8"
+              style={{ opacity, y }}
+            >
+              {filteredProjects
+                .slice(0, visibleCount)
+                .map((project, index) => (
+                  <ProjectCard key={project.id} project={project} index={index} />
+                ))}
+            </motion.div>
+
+            {visibleCount < filteredProjects.length && (
+              <div className="mt-10 flex justify-center">
+                <Button onClick={loadMore} className="rounded-full">
+                  Load More
+                </Button>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </section>
-  )
-})
+  );
+});
 
-const ProjectCard = memo(function ProjectCard({ project, index }: { project: Project; index: number }) {
+const ProjectCard = memo(function ProjectCard({
+  project,
+  index,
+}: {
+  project: Project;
+  index: number;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -182,8 +208,8 @@ const ProjectCard = memo(function ProjectCard({ project, index }: { project: Pro
     >
       <div className="relative aspect-video overflow-hidden">
         <Image
-          src={project.image || "/placeholder.svg"}
-          alt={project.title}
+          src={project?.Short_Screen_Shot || "/placeholder.svg"}
+          alt={project?.projectName}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-all duration-700 group-hover:scale-105"
@@ -193,11 +219,15 @@ const ProjectCard = memo(function ProjectCard({ project, index }: { project: Pro
       </div>
 
       <div className="p-4 sm:p-6">
-        <h3 className="mb-2 text-lg font-bold sm:text-xl">{project.title}</h3>
-        <p className="mb-4 text-xs text-muted-foreground sm:text-sm">{project.description}</p>
+        <h3 className="mb-2 text-lg font-bold sm:text-xl">
+          {project?.projectName}
+        </h3>
+        <p className="mb-4 text-xs text-muted-foreground sm:text-sm">
+          {project?.description}
+        </p>
 
         <div className="mb-4 flex flex-wrap gap-1.5 sm:mb-6 sm:gap-2">
-          {project.tags.map((tag) => (
+          {project?.tags?.map((tag) => (
             <Badge
               key={tag}
               variant="default"
@@ -215,19 +245,33 @@ const ProjectCard = memo(function ProjectCard({ project, index }: { project: Pro
             size="sm"
             className="rounded-full border-primary/30 hover:border-primary hover:bg-primary/10 text-xs h-8 sm:text-sm"
           >
-            <Link href={project.githubLink} target="_blank" rel="noopener noreferrer">
-              <Github className="mr-1.5 h-3.5 w-3.5 sm:mr-2 sm:h-4 sm:w-4" /> Code
+            <Link
+              href={project?.GitHub_Client_Side_Link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github className="mr-1.5 h-3.5 w-3.5 sm:mr-2 sm:h-4 sm:w-4" />
+              Code
             </Link>
           </Button>
-          <Button asChild size="sm" className="rounded-full bg-primary/80 hover:bg-primary text-xs h-8 sm:text-sm">
-            <Link href={project.liveLink} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="mr-1.5 h-3.5 w-3.5 sm:mr-2 sm:h-4 sm:w-4" /> Live Demo
+          <Button
+            asChild
+            size="sm"
+            className="rounded-full bg-primary/80 hover:bg-primary text-xs h-8 sm:text-sm"
+          >
+            <Link
+              href={project?.Live_Link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ExternalLink className="mr-1.5 h-3.5 w-3.5 sm:mr-2 sm:h-4 sm:w-4" />
+              Live Demo
             </Link>
           </Button>
         </div>
       </div>
     </motion.div>
-  )
-})
+  );
+});
 
-export default ProjectsSection
+export default ProjectsSection;
