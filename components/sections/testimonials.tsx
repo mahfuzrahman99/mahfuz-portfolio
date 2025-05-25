@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 const testimonials = [
   {
     id: 1,
-    name: "John Doe",
+    name: "Asif Mahbub",
     role: "CEO, TechStart",
     image: "/placeholder.svg?height=100&width=100",
     quote:
@@ -19,7 +19,7 @@ const testimonials = [
   },
   {
     id: 2,
-    name: "Jane Smith",
+    name: "Altaf Hossain",
     role: "Product Manager, DevCorp",
     image: "/placeholder.svg?height=100&width=100",
     quote:
@@ -28,7 +28,7 @@ const testimonials = [
   },
   {
     id: 3,
-    name: "Alex Johnson",
+    name: "Mohammad Alam",
     role: "Founder, CreativeMinds",
     image: "/placeholder.svg?height=100&width=100",
     quote:
@@ -37,7 +37,7 @@ const testimonials = [
   },
   {
     id: 4,
-    name: "Sarah Williams",
+    name: "Sarah Islam",
     role: "CTO, InnovateTech",
     image: "/placeholder.svg?height=100&width=100",
     quote:

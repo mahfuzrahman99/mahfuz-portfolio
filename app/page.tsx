@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import HeroSection from "@/components/sections/hero-section"
 import FloatingNav from "@/components/ui/floating-nav"
 import Footer from "@/components/layout/footer"
+import ExperienceSection from "@/components/sections/experience-section"
 
 // Dynamic imports for non-critical components
 const AboutSection = dynamic(() => import("@/components/sections/about-section"), {
@@ -52,6 +53,9 @@ export default function Home() {
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <TestimonialsSection />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <ExperienceSection />
       </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <ContactSection />
