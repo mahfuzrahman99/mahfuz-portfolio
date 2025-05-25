@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, memo } from "react"
+import { useState, useRef, useEffect, memo } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -65,6 +65,21 @@ const TestimonialsSection = memo(function TestimonialsSection() {
 
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
   const scale = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 0.8])
+
+  // New state to track if viewport is desktop (>=768px)
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    // Check window width on mount and on resize
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768)
+    }
+
+    handleResize() // Initial check
+
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   const nextTestimonial = () => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length)
@@ -188,7 +203,7 @@ const TestimonialsSection = memo(function TestimonialsSection() {
                     onClick={() => setActiveIndex(index)}
                     className={`h-1.5 w-6 rounded-full transition-colors sm:h-2 sm:w-8 ${
                       index === activeIndex ||
-                      (index === (activeIndex + 1) % testimonials.length && window.innerWidth >= 768)
+                      (index === (activeIndex + 1) % testimonials.length && isDesktop)
                         ? "bg-primary"
                         : "bg-muted"
                     }`}
