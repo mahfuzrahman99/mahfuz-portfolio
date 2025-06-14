@@ -17,13 +17,13 @@ const backendSkills = [
   { name: "Express.js", icon: <Server className="h-8 w-8" />, level: 90 },
   { name: "MongoDB", icon: <Database className="h-8 w-8" />, level: 85 },
   { name: "REST API", icon: <Globe className="h-8 w-8" />, level: 90 },
-  { name: "GraphQL", icon: <FileJson className="h-8 w-8" />, level: 75 },
+  // { name: "GraphQL", icon: <FileJson className="h-8 w-8" />, level: 75 },
 ]
 
 const toolsSkills = [
   { name: "Git", icon: <GitBranch className="h-8 w-8" />, level: 90 },
-  { name: "Docker", icon: <Database className="h-8 w-8" />, level: 70 },
-  { name: "Jest", icon: <Code className="h-8 w-8" />, level: 75 },
+  // { name: "Docker", icon: <Database className="h-8 w-8" />, level: 70 },
+  // { name: "Jest", icon: <Code className="h-8 w-8" />, level: 75 },
   { name: "Figma", icon: <Figma className="h-8 w-8" />, level: 80 },
   { name: "Responsive Design", icon: <Smartphone className="h-8 w-8" />, level: 95 },
 ]
