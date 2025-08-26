@@ -132,7 +132,7 @@ const ExperienceSection = memo(function ExperienceSection() {
             className="mx-auto mt-8 max-w-4xl sm:mt-12"
             style={{ opacity, y }}
           >
-            <Card className="overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm">
+            <Card className={`overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm md:h-[800px]`}>
               {/* Company Header */}
               <CardHeader className="relative bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-6 sm:p-8">
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
@@ -278,7 +278,7 @@ const ExperienceSection = memo(function ExperienceSection() {
             className="mx-auto mt-8 max-w-4xl sm:mt-12"
             style={{ opacity, y }}
           >
-            <Card className="overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm">
+            <Card className={`overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm md:h-[800px]`}>
               {/* Company Header */}
               <CardHeader className="relative bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-6 sm:p-8">
                 <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
