@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://mahfuzur.dev",
+    url: "https://www.mahfuzurrahman.pro",
     title: "Mahfuzur Rahman | MERN Stack Developer",
     description: "Passionate MERN Stack Developer delivering clean, scalable solutions for web applications.",
     siteName: "Mahfuzur Rahman Portfolio",
@@ -58,7 +58,7 @@ export default function RootLayout({
       <body className={cn("min-h-screen font-sans antialiased", spaceGrotesk.variable)}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
           storageKey="mahfuzur-theme"

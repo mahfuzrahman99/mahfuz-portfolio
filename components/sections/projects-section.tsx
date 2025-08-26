@@ -68,17 +68,26 @@ const ProjectsSection = memo(function ProjectsSection() {
     fetchProjects();
   }, []);
 
-  const filteredProjects = useCallback(
-    () =>
-      activeCategory === "all"
-        ? projects
-        : projects.filter((p) => p.category === activeCategory),
-    [activeCategory, projects]
-  )();
+  const filteredProjects =
+    activeCategory === "all"
+      ? projects
+      : projects.filter((p) => p.category === activeCategory);
 
   const loadMore = () => {
     setVisibleCount((prev) => prev + 6); // 2 more rows
   };
+
+  // const filteredProjects = useCallback(
+  //   () =>
+  //     activeCategory === "all"
+  //       ? projects
+  //       : projects.filter((p) => p.category === activeCategory),
+  //   [activeCategory, projects]
+  // )();
+
+  // const loadMore = () => {
+  //   setVisibleCount((prev) => prev + 6); // 2 more rows
+  // };
 
   return (
     <section
