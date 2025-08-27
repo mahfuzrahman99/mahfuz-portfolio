@@ -1,24 +1,29 @@
-"use client"
+"use client";
 
-import { useRef, memo } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { ArrowDown, Github, Linkedin, Mail } from "lucide-react"
-import { TypewriterEffect } from "@/components/ui/typewriter-effect"
+import { useRef, memo } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
+import { TypewriterEffect } from "@/components/ui/typewriter-effect";
 
 // Memoize the component to prevent unnecessary re-renders
 const HeroSection = memo(function HeroSection() {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
-  })
+  });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "40%"])
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  const words = [{ text: "MERN" }, { text: "Stack" }, { text: "Developer" }, { text: "." }]
+  const words = [
+    { text: "MERN" },
+    { text: "Stack" },
+    { text: "Developer" },
+    { text: "." },
+  ];
 
   return (
     <section
@@ -50,8 +55,9 @@ const HeroSection = memo(function HeroSection() {
       <motion.div
         className="absolute top-[20%] right-[15%] hidden h-16 w-16 border border-primary/30 bg-transparent sm:block"
         style={{
-          clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
-        }}        
+          clipPath:
+            "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+        }}
         animate={{
           scale: [1, 1.2, 1],
           rotate: [0, 180, 0],
@@ -102,7 +108,8 @@ const HeroSection = memo(function HeroSection() {
       <motion.div
         className="absolute top-[10%] left-[30%] hidden h-14 w-14 border border-primary/30 bg-transparent sm:block"
         style={{
-          clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
+          clipPath:
+            "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
         }}
         animate={{
           y: [0, 30, 0],
@@ -199,8 +206,8 @@ const HeroSection = memo(function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Passionate about crafting clean, scalable web solutions with modern technologies. Turning complex problems
-          into elegant, efficient code.
+          Passionate about crafting clean, scalable web solutions with modern
+          technologies. Turning complex problems into elegant, efficient code.
         </motion.p>
 
         <motion.div
@@ -210,9 +217,17 @@ const HeroSection = memo(function HeroSection() {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <Button asChild size="lg" className="w-full rounded-full sm:w-auto">
-            <Link href="#contact">Get in touch</Link>
+            <a href="/Mahfuzur Rahman Shabbir - HR & Admin.pdf" download>
+              Download my CV
+            </a>
           </Button>
-          <Button asChild variant="outline" size="lg" className="w-full rounded-full sm:w-auto">
+
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="w-full rounded-full sm:w-auto"
+          >
             <Link href="#projects">View my work</Link>
           </Button>
         </motion.div>
@@ -223,7 +238,11 @@ const HeroSection = memo(function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <Link href="https://github.com/mahfuzrahman99" target="_blank" rel="noopener noreferrer">
+          <Link
+            href="https://github.com/mahfuzrahman99"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Button variant="ghost" size="icon" className="rounded-full">
               <Github className="h-5 w-5" />
               <span className="sr-only">GitHub</span>
@@ -266,7 +285,7 @@ const HeroSection = memo(function HeroSection() {
         </Button>
       </motion.div>
     </section>
-  )
-})
+  );
+});
 
-export default HeroSection
+export default HeroSection;
