@@ -218,7 +218,7 @@ const HeroSection = memo(function HeroSection() {
         >
           <Button asChild size="lg" className="w-full rounded-full sm:w-auto">
             <a href="/Mahfuzur Rahman Shabbir - HR & Admin.pdf" download>
-              Download my CV
+              Download Resume
             </a>
           </Button>
 
