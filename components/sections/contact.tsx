@@ -1,13 +1,13 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
-import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Mail, MessageSquare, Phone, Send } from "lucide-react"
 import emailjs from "emailjs-com"
+import { motion } from "framer-motion"
+import { Mail, MessageSquare, Phone, Send } from "lucide-react"
+import type React from "react"
+import { useState } from "react"
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -29,6 +29,7 @@ export default function Contact() {
     e.preventDefault()
     setIsSubmitting(true)
     setStatusMessage(null)
+
 
     try {
       // 1️⃣ Send main email to you
