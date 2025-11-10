@@ -159,10 +159,10 @@ export default function ContactSection() {
                         Phone (WhatsApp)
                       </h4>
                       <p className="text-xs text-muted-foreground sm:text-sm">
-                        +880 1888 677322
+                        +880 1764661005
                       </p>
                       <Link
-                        href="tel:+8801888677322"
+                        href="tel:+8801764661005"
                         className="mt-1 inline-block text-xs text-primary hover:underline sm:text-sm"
                       >
                         Call me

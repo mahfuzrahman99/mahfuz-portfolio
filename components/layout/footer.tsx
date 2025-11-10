@@ -188,8 +188,8 @@ export default function Footer() {
                   <Phone className="mt-0.5 h-4 w-4 text-primary sm:h-5 sm:w-5" />
                   <div>
                     <span className="block text-xs text-muted-foreground sm:text-sm">Phone (WhatsApp):</span>
-                    <Link href="tel:+8801888677322" className="text-xs hover:text-primary transition-colors sm:text-sm">
-                      +880 1888 677322
+                    <Link href="tel:+8801764661005" className="text-xs hover:text-primary transition-colors sm:text-sm">
+                      +880 1764661005
                     </Link>
                   </div>
                 </li>
